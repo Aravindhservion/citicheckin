@@ -1,0 +1,61 @@
+package test;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+
+public class XML_Manipulation {
+   public static void main(String[] args){
+	   ArrayList<String> sfile=new ArrayList<String>();
+	   ArrayList<String> dfile=new ArrayList<String>();
+	   sfile=getVal("src//test//duplication.properties");
+	   dfile=getVal();
+      
+   }
+   static ArrayList<String> getVal(String path){
+	   ArrayList<String> afile=new ArrayList<String>();
+	   try {	
+	         File inputFile = new File(path);
+	         DocumentBuilderFactory dbFactory 
+	            = DocumentBuilderFactory.newInstance();
+	         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	         Document doc = dBuilder.parse(inputFile);
+	         doc.getDocumentElement().normalize();
+	         System.out.println("Root element :" 
+	            + doc.getDocumentElement().getNodeName());
+	         NodeList nList = doc.getElementsByTagName("student");
+	         System.out.println(nList.getLength());
+	         System.out.println("----------------------------");
+	         
+	         for (int temp = 0; temp < nList.getLength(); temp++) {
+	          	 Node nNode = nList.item(temp);
+	             Element eElement = (Element) nNode;
+	             NodeList cList = eElement.getElementsByTagName("classvariable");
+	             	for (int temp1 = 0; temp1 < cList.getLength(); temp1++) {
+	             		String val=eElement
+	                            .getElementsByTagName("classvariable")
+	                            .item(temp1)
+	                            .getTextContent();
+	                         
+	                    String val1= val.substring(val.lastIndexOf("/")+1);
+	                    afile.add(val1);
+	        	 }
+	         }
+	         for(int i=0;i<afile.size();i++){
+	      		System.out.println(i+" "+afile.get(i));
+	      	}
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
+	   return afile;
+	   }
+   
+   
+}
